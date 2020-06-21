@@ -1,10 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import Index from './../components/index/Index';
+import initialize from "../utils/initialize";
+import {connect} from 'react-redux';
 
-const Title = styled.h1`
-  font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
-  text-align: left;
-`
 
-export default () => <Title>My page</Title>
+// import axios from 'axios';
+function index() {
+
+    return (
+            <Index/>
+    )
+}
+
+index.getInitialProps = async ctx => {
+    initialize(ctx);
+};
+
+export default connect((state => state))(index);

@@ -49,4 +49,4 @@ This example shows how to enable right to left styles using `styled-components`.
 
 The good news, is there is no need of doing it manually anymore. `stylis-plugin-rtl` makes the transformation automatic.
 
-From `pages/index.js` you can see, styles are `text-align: left;`, but what is actually applied is `text-align: right;`.
+From `pages/Layout.js` you can see, styles are `text-align: left;`, but what is actually applied is `text-align: right;`.

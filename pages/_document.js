@@ -1,33 +1,35 @@
 import React from 'react'
-import Document, { Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
-import stylisRTLPlugin from 'stylis-plugin-rtl'
+import Document, {Head, Main, NextScript} from 'next/document'
+
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    const sheet = new ServerStyleSheet()
+    // static async getInitialProps(ctx) {
+    //     const initialProps = await Document.getInitialProps(ctx);
+    //     return {...initialProps}
+    // }
 
-    const page = renderPage(App => props =>
-      sheet.collectStyles(
-        <StyleSheetManager stylisPlugins={[stylisRTLPlugin]}>
-          <App {...props} />
-        </StyleSheetManager>
-      )
-    )
-
-    const styleTags = sheet.getStyleElement()
-
-    return { ...page, styleTags }
-  }
-  render() {
-    return (
-      <html>
-        <Head>{this.props.styleTags}</Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </html>
-    )
-  }
+    render() {
+        return (
+            <html>
+            <Head>
+                <meta charSet="utf-8"/>
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=0"
+                />
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+                <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+                {/*<link rel="stylesheet" href="https://cdn.plyr.io/3.5.2/plyr.css" />*/}
+                <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+                      integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ'
+                      crossOrigin='anonymous'/>
+            </Head>
+            <body>
+            <Main/>
+            <script defer src="https://code.getmdl.io/1.3.0/material.min.js"/>
+            <NextScript/>
+            </body>
+            </html>
+        )
+    }
 }

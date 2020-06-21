@@ -1,0 +1,120 @@
+.rtl{
+    direction: rtl;
+    text-align: right;
+}
+
+
+.menuItem{
+    position: relative;
+    width: 180px;
+    height: 250px;
+    border-radius: 5px;
+    overflow: hidden
+}
+
+.menuItem a{
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*display: inline-block;*/
+}
+.itemCover{
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+.itemBody{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 0.7rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 15px;
+    -moz-transition: all 0.4s ease-in-out 0s;
+    -webkit-transition: all 0.4s ease-in-out 0s;
+    -ms-transition: all 0.4s ease-in-out 0s;
+    transition: all 0.4s ease-in-out 0s;
+
+    opacity: 0;
+}
+
+.menuItem:hover .itemBody{
+    opacity: 1;
+}
+
+.hvrbox_text{
+    text-align: center;
+    font-size: 13px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 80%;
+}
+.hvrbox_score{
+    border-radius: 15px;
+}
+.color_orange {
+    color: #f25823;
+}
+.color_orange:hover {
+    color: #d84f1f;
+}
+
+.title:hover{
+    color: #59c600;
+}
+
+.ag_shop_card_body {
+    display: block;
+    /*height: 250px;*/
+    /*width: 180px;*/
+    background-position: 50%;
+    background-size: cover;
+    overflow: hidden;
+    -webkit-transition: .4s;
+    -moz-transition: .4s;
+    -o-transition: .4s;
+    transition: .4s;
+    position: relative;
+}
+.ag_shop_card_box {
+    background-color: #FFF;
+    overflow: hidden;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 4px;
+    -webkit-transition: .4s;
+    -moz-transition: .4s;
+    -o-transition: .4s;
+    transition: .4s;
+}
+
+.ag_card_bg {
+    height: 100%;
+    width: 100%;
+    background-position: 50%;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    -webkit-transition: height .6s;
+    -moz-transition: height .6s;
+    -o-transition: height .6s;
+    transition: height .6s;
+}
+
+.ag_shop_card_footer {
+    padding: 15px 30px;
+    border: 0;
+    background-color: #FFF;
+    position: relative;
+}
