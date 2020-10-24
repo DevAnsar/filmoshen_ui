@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import useSWR, {useSWRPages} from "swr/dist/index";
-import useOnScreen from "../../hooks/use-on-screen";
+import useOnScreen from "../../hooks/useOnScreen";
 import fetcher from "../../lib/fetcher";
 import rtl from '../../style/reboot.module.css';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import Tab from 'react-bootstrap/Tab';
 
 function Index() {
 
+    const [sideBar, setSideBar] = useState([]);
     const {pages, isLoadingMore, loadMore, pageSWRs, pageCount} = useSWRPages(
         `blog`,
         ({offset, withSWR}) => {
@@ -24,7 +25,8 @@ function Index() {
             // console.log('data', data);
             if (!data) return null;
 
-            const {posts} = data;
+            const {posts, side_bar} = data;
+            setSideBar(side_bar);
             console.log('posts', posts);
 
             // return null;
@@ -72,7 +74,7 @@ function Index() {
 
                             <div className="col-12 col-md-3 pt-4">
                                 <Link href={'/blog/[token]'} as={`/blog/${post.token}`}>
-                                    <a >
+                                    <a>
                                         <img src={`${process.env.BaseUrl}${post.cover}`} className="img-fluid"/>
                                     </a>
                                 </Link>
@@ -152,69 +154,92 @@ function Index() {
                         <div className="container border bg-white rounded pt-2 pb-5">
 
 
-                           {/*<sideBar />*/}
+                            {/*<sideBar />*/}
 
-                            <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                            <Tabs defaultActiveKey="most_visited" id="uncontrolled-tab-example">
 
-                                <Tab eventKey="profile" title="پربازدیدها">
+                                <Tab eventKey="most_visited" title="پربازدیدها">
 
                                     <>
-
                                         <div className="row">
                                             <div className="col-12 col-md-12">
-                                                <div className="row pt-2">
-                                                    <div className="col-7">
-                                                        <a href="#">
-                                                            <p className="text-justify text-dark"
-                                                               style={{lineHeight: '1.5'}}>
-                                                                لیست کامل استخرهای شمال
-                                                                تهران + آدرس، قیمت و تخفیف بلیط استخر شمال تهران
-                                                            </p>
-                                                        </a>
-                                                        <p className="font text-secondary font-ss pt-1">
-                                                            <i className="fa fa-clock mx-1 text-secondary"/>
-                                                            >شنبه 27 مهر
-                                                        </p>
-                                                    </div>
-                                                    <div className="col-5">
-                                                        <a href="#">
-                                                            <img src="img/201.jpg"
-                                                                 className="img-weblog img-fluid d-block mx-auto"/>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                {/*//*/}
+                                                {
+                                                    sideBar?.most_visited?.map(item => {
+                                                        return (
+                                                            <div key={item.id} className="row pt-2">
+                                                                <div className="col-7">
+                                                                    <a href="#">
+                                                                        <p className="text-justify text-dark"
+                                                                           style={{lineHeight: '1.5'}}>
+                                                                            {
+                                                                                item.title
+                                                                            }
+                                                                        </p>
+                                                                    </a>
+                                                                    <p className="font text-secondary font-ss pt-1">
+                                                                        <i className="fa fa-clock mx-1 text-secondary"/>
+                                                                        >
+                                                                        {
+                                                                            item.created_at
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col-5">
+                                                                    <a href="#">
+                                                                        <img src={`${process.env.BaseUrl + item.cover}`}
+                                                                             className="img-weblog img-fluid d-block mx-auto"/>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+
                                             </div>
                                         </div>
 
                                     </>
                                 </Tab>
-                                <Tab eventKey="contact" title="تازه ها">
+                                <Tab eventKey="news" title="تازه ها">
 
                                     <>
+                                        <div className="row">
+                                            <div className="col-12 col-md-12">
 
-                                        <div className="row pt-2">
-                                            <div className="col-7">
-                                                <a href="#">
-                                                    <p className="text-justify text-dark"
-                                                       style={{lineHeight: '1.5'}}>لیست
-                                                        کامل استخرهای شمال تهران + آدرس، قیمت و تخفیف بلیط استخر
-                                                        شمال
-                                                        تهران</p>
-                                                </a>
-                                                <p className="font text-secondary font-ss pt-1">
-                                                    <i className="fa fa-clock mx-1 text-secondary"/>
-                                                    شنبه 27 مهر
-                                                </p>
-                                            </div>
-                                            <div className="col-5">
-                                                <a href="#">
-                                                    <img src="img/201.jpg"
-                                                         className="img-weblog img-fluid d-block mx-auto"/>
-                                                </a>
+                                                {
+                                                    sideBar?.news?.map(item => {
+                                                        return (
+                                                            <div key={item.id} className="row pt-2">
+                                                                <div className="col-7">
+                                                                    <a href="#">
+                                                                        <p className="text-justify text-dark"
+                                                                           style={{lineHeight: '1.5'}}>
+                                                                            {
+                                                                                item.title
+                                                                            }
+                                                                        </p>
+                                                                    </a>
+                                                                    <p className="font text-secondary font-ss pt-1">
+                                                                        <i className="fa fa-clock mx-1 text-secondary"/>
+                                                                        >
+                                                                        {
+                                                                            item.created_at
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col-5">
+                                                                    <a href="#">
+                                                                        <img src={`${process.env.BaseUrl + item.cover}`}
+                                                                             className="img-weblog img-fluid d-block mx-auto"/>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+
                                             </div>
                                         </div>
-
                                     </>
                                 </Tab>
                             </Tabs>

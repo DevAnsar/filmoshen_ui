@@ -3,7 +3,7 @@ import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 import useWindowSize from './../hooks/useWindowSize';
-
+import {Spinner} from 'react-bootstrap';
 const Master = ({children}) => {
     const size = useWindowSize();
     const [app_start, setAppStart] = useState(true);
@@ -13,6 +13,7 @@ const Master = ({children}) => {
     const [app_footer_description, setAppFooterDescription] = useState(null);
     const [socials, setSocials] = useState(null);
     const [mobile_apps, setMobile_apps] = useState(null);
+    const [cat, setCat] = useState({"movies":[],"musics":[]});
 
     useEffect(() => {
         console.log('Master reloaded');
@@ -25,6 +26,7 @@ const Master = ({children}) => {
             setAppFooterDescription(constData.app_footer_description);
             setSocials(constData.socials);
             setMobile_apps(constData.apps);
+            setCat(constData.categories);
 
             appStart();
         }).catch(error => console.log(error));
@@ -47,6 +49,7 @@ const Master = ({children}) => {
                     <Header
                         site_name={app_name}
                         app_logo={app_logo}
+                        categories={cat}
                     />
 
                     {children}
@@ -67,7 +70,14 @@ const Master = ({children}) => {
 
         return (
             <div className='container-fluid p-0' style={{width: size.width, height: size.height, textAlign: 'center'}}>
-                <div style={{marginTop: 300, display: 'inline-block'}}>Loading</div>
+                <div style={{marginTop: 280, display: 'inline-block'}}>
+
+                    {/*, background: `url('/img/loading.png') no-repeat center`*/}
+                    <span style={{width: '120px', height: '120px', display: 'block', position: 'relative'}} >
+                        <img src={`/img/loading_120.png`} style={{width:'100%'}} />
+                        <Spinner className='startLoading' animation="border" variant="white" />
+                    </span>
+                </div>
             </div>
         )
     };
@@ -86,4 +96,5 @@ const Master = ({children}) => {
 // );
 //
 // export default connect(mapStateToProps, actions)(Master);
+
 export default Master;

@@ -9,22 +9,26 @@ import slider from '../../style/HorizontalList.module.css';
 
 // One item component
 // selected prop will be passed
-const MenuItem = ({id, title, image, token,genre}) => {
+const MenuItem = ({id, title, image, token, genre,score}) => {
     return (
 
-        <div className={`menu-item ${slider.menuItem} cart p-0`}>
+        <div className={` ${slider.listItem} cart p-2`}>
 
             <Link as={`/movie/${token}`} href='/movie/[token]'>
-                <a>
-                    <div className={`card-body p-0 ${slider.itemCover}`}
-                         style={{backgroundImage: `url(${process.env.BaseUrl}${image})`}} />
+                <a style={{width: '100%', height: '100%', position: 'relative', display: 'block'}}>
+                    {/*<div className={`card-body p-0 ${slider.itemCover}`}*/}
+                    {/*style={{backgroundImage: `url(${process.env.BaseUrl}${image})`}} />*/}
+                    <img src={`${process.env.BaseUrl}${image}`} className='' style={{width: '100%'}}/>
 
                     <div className={` ${slider.itemBody}`}>
                         <div className={`${slider.hvrbox_text}`}>
-                            <p className={`border bg-white pt-1 w-75 mx-auto ${slider.hvrbox_score} ${slider.color_orange}`}>
-                                <i className="fas fa-heart mr-1" />
-                                88%
-                            </p>
+                            {
+                                score!==null?<p className={`border bg-white pt-1 w-75 mx-auto ${slider.hvrbox_score} ${slider.color_orange}`}>
+                                    <i className="fas fa-heart mr-1"/>
+                                        {score}%
+                                </p>:''
+                            }
+
                             <p className="pt-1">{title}</p>
                             <p className="pt-1">{genre}</p>
                         </div>
@@ -39,24 +43,54 @@ const MenuItem = ({id, title, image, token,genre}) => {
 // All items component
 // Important! add unique key
 export const Menu = list => {
-    console.log(list);
-    return list?.map(el => {
-        // console.log(el);
-        const {id,token,title,cover,genre} = el;
+    // console.log('list', list);
+    return list ? list.map((el , index) => {
+        // console.log('el', el);
+        let {id, token, title, cover, genre , score} = el;
 
-        return <MenuItem id={id} title={title} image={cover} key={token} token={token} genre={genre}/>;
-    });
+        return <MenuItem id={id?id:0}
+                         title={title?title:'test'}
+                         image={cover?cover:'/'}
+                         key={token?token:index}
+                         token={token?token:'/'}
+                         genre={genre?genre:''}
+                         score={score}
+        />;
+        // return <h2>{title}</h2>;
+    }):null
+
+
 };
 
-export default function HorizontalList2({movies, title ,showAll,sub=false}) {
+export default function HorizontalList2({movies, title, showAll, sub = false}) {
 
-    let menu = Menu(movies ? movies : []);
+    // console.log(movies.length);
+    let menu =movies.length>0 ? Menu(movies ? movies : []):<></>;
 
+    function NextArrow(props) {
+        const {className, style, onClick} = props;
+        return (
+            <div
+                style={{display: 'none'}}
+                onClick={onClick}
+            />
+        );
+    }
+
+    function PrevArrow(props) {
+        const {className, style, onClick} = props;
+        return (
+            <div
+                style={{display: 'none'}}
+                onClick={onClick}
+            />
+        );
+    }
 
     const settings = {
         slidesToShow: 7,
-        slidesToScroll: 4,
-        dots: false,
+        slidesToScroll: 0,
+        dots: true,
         infinite: false,
         speed: 500,
         rtl: false,
@@ -64,65 +98,55 @@ export default function HorizontalList2({movies, title ,showAll,sub=false}) {
         autoplaySpeed: 5000,
         pauseOnHover: true,
         lazyLoad: true,
-        centerMode: true,
+        centerMode: false,
+        nextArrow: <NextArrow/>,
+        prevArrow: <PrevArrow/>,
         responsive: [
             {
-                breakpoint: 1044,
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 6,
+                    slidesToScroll: 4,
+                    infinite: false,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 5,
+                    slidesToScroll: 5,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 768,
                 settings: {
                     slidesToShow: 4,
                     slidesToScroll: 4,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
                     initialSlide: 0
                 }
             },
             {
-                breakpoint: 480,
+                breakpoint: 544,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 2
                 }
             },
-            {
-                breakpoint: 375,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            },
-            {
-                breakpoint: 321,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
         ]
+
     };
 
     return (
         <>
 
-            <Container fluid className='pt-2'>
+            <Container fluid className='pt-2 mb-3 mb-lg-4'>
                 <Row className={slider.rtl}>
                     <div className="col-6 ">
-                        <h6>{title}</h6>
+                        <i className='fa fa-film d-inline-block f12'/>
+                        <h6 className='d-inline-block pr-2 f11'>{title}</h6>
                     </div>
                     <div className="col-6 text-left">
                         {

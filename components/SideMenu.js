@@ -1,24 +1,12 @@
-import React,{useState , useEffect} from 'react';
+import React from 'react';
 import {slide as Menu} from 'react-burger-menu'
 import {connect} from 'react-redux';
-import {withRouter} from "next/router";
+import { useRouter} from "next/router";
 import actions from "../redux/actions";
-function SideMenu({open,setOpen,headerLinks,isAuthenticated,HeaderItem,router,deauthenticate}) {
-    function showSettings(event) {
-        event.preventDefault()
+import {HeaderItem} from './Header';
 
-    }
-
-   // const [isOpen,setIsOpen]=useState(false);
-
-    // useEffect(()=>{
-    //     console.log('clicked...');
-    //     setOpen(!open);
-    // },[open]);
-
-    // useEffect(()=>{
-    //     // setOpen(isOpen);
-    // },[isOpen]);
+function SideMenu({open,close,headerLinks,isAuthenticated,deauthenticate,search}) {
+    const router=useRouter();
 
     var styles = {
         bmBurgerButton: {
@@ -67,29 +55,40 @@ function SideMenu({open,setOpen,headerLinks,isAuthenticated,HeaderItem,router,de
 
     // NOTE: You also need to provide styles, see https://github.com/negomi/react-burger-menu#styling
     return (
-        <Menu right styles={styles} elastic isOpen={open} customBurgerIcon={false}>
-            <ul>
+        <Menu right styles={styles} elastic isOpen={open}  customBurgerIcon={false}>
+            <ul  className='mt-3 w-100 sideMenuUl'>
+
+                <li className="nav_item mt-3">
+                    <a className={`nav-link  mr-1 `} onClick={(e) => {
+                        console.log('search...');
+                        e.preventDefault();
+                        close();
+                        search()
+                    }}>
+                        <p className="">جستجو</p>
+                    </a>
 
 
+                </li>
                 {
                     headerLinks.map((item, index) => {
                         if (!item.show) {
                             return (
                                 <HeaderItem key_index={index} path={item.path}
-                                            url_path={router.pathname} label={item.label}/>
+                                            url_path={router.pathname} label={item.label} close={close} />
                             )
                         } else if (item.show === 'logout') {
                             if (!isAuthenticated) {
                                 return (
                                     <HeaderItem key_index={index} path={item.path}
-                                                url_path={router.pathname} label={item.label}/>
+                                                url_path={router.pathname} label={item.label} close={close} />
                                 )
                             }
                         } else if (item.show === 'login') {
                             if (isAuthenticated) {
                                 return (
                                     <HeaderItem key_index={index} path={item.path}
-                                                url_path={router.pathname} label={item.label}/>
+                                                url_path={router.pathname} label={item.label} close={close} />
                                 )
                             }
                         }
@@ -119,4 +118,4 @@ function SideMenu({open,setOpen,headerLinks,isAuthenticated,HeaderItem,router,de
 const mapStateToProps = (state) => (
     {isAuthenticated: !!state.authentication.token}
 );
-export default connect(mapStateToProps,actions)(withRouter(SideMenu));
+export default connect(mapStateToProps,actions)(SideMenu);

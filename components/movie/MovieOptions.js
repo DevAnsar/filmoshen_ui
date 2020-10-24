@@ -8,6 +8,7 @@ import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 
 import ExpansionPanel from 'material-expansion-panel';
 import axios from 'axios';
+import ToastsAlert from "../ToastsAlert";
 
 export const Sessions = ({sessions, isAuthenticated}) => {
     const [movie_sessions, setSessions] = useState(sessions);
@@ -28,6 +29,10 @@ export const Sessions = ({sessions, isAuthenticated}) => {
             toggleExpand: true
         }];
 
+    const [alert, setAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertColor, setAlertColor] = useState('#fd3746');
+
     function handleAddBookmark(token) {
         console.log(token);
 
@@ -40,7 +45,7 @@ export const Sessions = ({sessions, isAuthenticated}) => {
                     setSessions(prevState => {
                         let Sessions = prevState.map(session => {
                             let Session = session;
-                            let episodes=Session.episodes.map(episode => {
+                            let episodes = Session.episodes.map(episode => {
                                 if (episode.token === token) {
                                     console.log('token', episode.token);
                                     return {
@@ -52,7 +57,7 @@ export const Sessions = ({sessions, isAuthenticated}) => {
                             });
                             return {
                                 ...Session,
-                                'episodes':episodes
+                                'episodes': episodes
                             }
                         });
                         return Sessions;
@@ -74,7 +79,7 @@ export const Sessions = ({sessions, isAuthenticated}) => {
                     setSessions(prevState => {
                         let Sessions = prevState.map(session => {
                             let Session = session;
-                            let episodes=Session.episodes.map(episode => {
+                            let episodes = Session.episodes.map(episode => {
                                 if (episode.token === token) {
                                     console.log('token', episode.token);
                                     return {
@@ -86,7 +91,7 @@ export const Sessions = ({sessions, isAuthenticated}) => {
                             });
                             return {
                                 ...Session,
-                                'episodes':episodes
+                                'episodes': episodes
                             }
                         });
                         return Sessions;
@@ -96,9 +101,23 @@ export const Sessions = ({sessions, isAuthenticated}) => {
             .catch(err => console.log(err))
     }
 
+    function showNoAuthAlert() {
+        setAlertMessage(' ابتدا باید وارد شوید');
+        setAlert(true);
+        alertTimeOutHandle();
+    }
+    let commentMessageTimeOut;
+    function alertTimeOutHandle() {
+        clearTimeout(commentMessageTimeOut);
+        commentMessageTimeOut =setTimeout(() => {
+            setAlert(false);
+        }, 4000);
+    }
+
     return (
         <div className="container-fluid px-md-5 px-lg-5 pt-5 mt-3">
 
+            <ToastsAlert alert_show={alert} message={alertMessage} color={alertColor}/>
             <Tabs>
                 <TabList>
                     {
@@ -170,26 +189,37 @@ export const Sessions = ({sessions, isAuthenticated}) => {
                                                                         </Link>
                                                                 }
 
-                                                                {
-                                                                    episode.bookmark ?
-                                                                        <button type="button"
-                                                                                onClick={() => handleRemoveBookmark(episode.token)}
-                                                                                className="btn btn-success font-md mr-3 mt-3 f7">نشان
-                                                                            شده
-                                                                        </button>
-                                                                        :
+                                                                {/*{*/}
+                                                                {/*episode.bookmark ?*/}
+                                                                {/*<button type="button"*/}
+                                                                {/*onClick={() => handleRemoveBookmark(episode.token)}*/}
+                                                                {/*className="btn btn-success font-md mr-3 mt-3 f7">نشان*/}
+                                                                {/*شده*/}
+                                                                {/*</button>*/}
+                                                                {/*:*/}
 
-                                                                        <button type="button"
-                                                                                onClick={() => handleAddBookmark(episode.token)}
-                                                                                className="btn btn-light font-md mr-3 mt-3 f7">نشان
-                                                                            کردن
-                                                                        </button>
+                                                                {/*<button type="button"*/}
+                                                                {/*onClick={() => handleAddBookmark(episode.token)}*/}
+                                                                {/*className="btn btn-light font-md mr-3 mt-3 f7">نشان*/}
+                                                                {/*کردن*/}
+                                                                {/*</button>*/}
 
-                                                                }
+                                                                {/*}*/}
 
                                                                 <button type="button"
-                                                                        className="btn btn-outline-red  font-md ml-3 mt-3">
-                                                                    <i className="far fa-bookmark text-center "/>
+                                                                        className="btn btn-outline-red  font-md mr-3 mt-3"
+                                                                        onClick={() => {
+                                                                            isAuthenticated ?
+                                                                                episode.bookmark ?
+                                                                                    handleRemoveBookmark(episode.token)
+                                                                                    :
+                                                                                    handleAddBookmark(episode.token)
+                                                                                :
+                                                                                showNoAuthAlert()
+                                                                        }}
+
+                                                                >
+                                                                    <i className={`far fa-bookmark  text-center ${episode.bookmark ? 'fa' : ''}`}/>
                                                                 </button>
 
                                                             </div>
@@ -219,12 +249,12 @@ export const Story = (title, story, about) => {
         <Container fluid className="px-md-5 px-lg-5 pt-4">
             <div className="row">
                 {/*<div className="col-12 col-lg-4 mt-3">*/}
-                    {/*<img src="img/810.jpg" className="img-fluid" style={{width: '100%'}}/>*/}
-                    {/*<div className="back"/>*/}
-                    {/*<div className="icon"><i className="fas fa-play pt-3 "/></div>*/}
-                    {/*<div className="icon1 text-center">*/}
-                        {/*<p className="font-ms py-2 px-3">24 عکس</p>*/}
-                    {/*</div>*/}
+                {/*<img src="img/810.jpg" className="img-fluid" style={{width: '100%'}}/>*/}
+                {/*<div className="back"/>*/}
+                {/*<div className="icon"><i className="fas fa-play pt-3 "/></div>*/}
+                {/*<div className="icon1 text-center">*/}
+                {/*<p className="font-ms py-2 px-3">24 عکس</p>*/}
+                {/*</div>*/}
                 {/*</div>*/}
                 <div className="col-12 col-lg-8 mt-3">
                     {/*<h6>داستان فیلم شنل قرمزی</h6>*/}
@@ -286,7 +316,7 @@ export const Actors = ({actors, movie_title}) => {
                                 <div key={actor.id} className="col-6 col-md-3 col-lg-2 mt-3">
                                     <Link href='/crew/[slug]' as={`/crew/${actor.slug}`}>
                                         <a>
-                                            <img src={`${process.env.BaseUrl}${actor.avatar}`}
+                                            <img src={`${actor.avatar ? process.env.BaseUrl+actor.avatar : '/img/null_user.png'}`}
                                                  className={`img-fluid d-block mx-auto ${movieStyle.img_actor}`}/>
                                             <p className="text-center font-s mt-2">{actor.name}</p>
                                             {/*<p className="text-center font-ms mt-1 text-secondary">بازیگر</p>*/}

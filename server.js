@@ -3,7 +3,7 @@ const next = require('next');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = 80;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
@@ -34,6 +34,11 @@ app.prepare()
             }
         });
 
+        server.get('/subscribe/:id', (req, res) => {
+                // res.redirect(`http://api.filmoshen.ir:8080/site/payment/get/${req.params.id}?api_token=${req.cookies.token}`);
+                res.redirect(`http://192.186.1.104:8888/site/payment/get/${req.params.id}?api_token=${req.cookies.token}`);
+        });
+
         server.get('*', (req, res) => {
             return handle(req, res);
         });
@@ -48,8 +53,3 @@ app.prepare()
         process.exit(1);
     });
 
-// PassengerBaseUrl /
-// PassengerAppRoot /home/filmoshen/domains/filmoshen.ir/myapp
-//
-// PassengerAppType node
-// PassengerStartupFile server.js

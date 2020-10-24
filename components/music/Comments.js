@@ -49,10 +49,10 @@ function Comment({comment}) {
     return (
         <>
             <div className="row py-2 px-2 ">
-                <div className="col-12 col-md-2 col-lg-2 mt-2">
+                <div className="col-2 col-md-2 col-lg-2 mt-2">
                     <img src="/img/man%20(3).png" className="img-fluid d-block mx-lg-0 mx-md-0 mx-auto"/>
                 </div>
-                <div className="col-12 col-md-5 col-lg-7 mt-2">
+                <div className="col-7 col-md-5 col-lg-7 mt-2">
                     <p className="font-s pt-xl-1 pt-md-1 pt-2">
                             <span className="ml-3">
                                 {

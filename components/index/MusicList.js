@@ -9,7 +9,7 @@ import slider from '../../style/HorizontalList.module.css';
 
 // One item component
 // selected prop will be passed
-const MenuItem = ({id, title, image, token ,singers , view , created_at}) => {
+const MenuItem = ({id, title, image, token, singers, view, created_at}) => {
     return (
 
         <>
@@ -35,8 +35,8 @@ const MenuItem = ({id, title, image, token ,singers , view , created_at}) => {
             {/*</div>*/}
 
 
-            <div className="ag_shop_card_box" key={token} style={{background: '#fff'}}>
-                <div className="ag_shop_card_body">
+            <div className="ag_shop_card_box p-2" key={token}>
+                <div className="ag_shop_card_body" style={{background: '#fff'}}>
 
                     <div className="js-card-bg ag_card_bg">
                         <Link href={`/music/[token]`} as={`/music/${token}`}>
@@ -47,13 +47,25 @@ const MenuItem = ({id, title, image, token ,singers , view , created_at}) => {
                         </Link>
                     </div>
                 </div>
-                <div className="ag_shop_card_footer p-0">
+                <div className="ag_shop_card_footer p-0" style={{background: '#fff'}}>
                     <Link href={`/music/[token]`} as={`/music/${token}`}>
-                        <a >
+                        <a>
                             <div className="card-body pt-1">
-                                <p className="text-center font-ms text-dark">
+                                <p className={` text-center font-ms text-dark ${slider.rtl} `}>
                                     {
-                                        singers.map(signer=>` ${signer.name} `)
+                                        singers.map((signer,index) => {
+                                            return (
+                                                <>
+                                                    <span style={{
+                                                        marginLeft: '4px',
+                                                        display: 'inline-block'
+                                                    }}>{signer.name }</span>
+                                                    {
+                                                        singers.length > 1 ? index+1!==singers.length ? ` و `:'' :''
+                                                    }
+                                                </>
+                                            )
+                                        })
                                     }
                                 </p>
                                 <p className="text-center font-ms text-dark">{title}</p>
@@ -90,25 +102,46 @@ const MenuItem = ({id, title, image, token ,singers , view , created_at}) => {
 // All items component
 // Important! add unique key
 export const Menu = list => {
-    console.log(list);
+    // console.log(list);
     return list?.map(el => {
         // console.log(el);
         // const {id} = el;
-        const {token ,title , cover , singers , created_at , viewCount} = el;
+        const {token, title, cover, singers, created_at, viewCount} = el;
 
-        return <MenuItem title={title} singers={singers} image={cover} key={token} token={token} created_at={created_at} view={viewCount}/>;
+        return <MenuItem title={title} singers={singers} image={cover} key={token} token={token} created_at={created_at}
+                         view={viewCount}/>;
     });
 };
 
-function MusicList({musics, title, showAll}) {
+function MusicList({musics, title, showAll, sub = false}) {
 
     let menu = Menu(musics ? musics : []);
 
 
+    function NextArrow(props) {
+        const {className, style, onClick} = props;
+        return (
+            <div
+                style={{display: 'none'}}
+                onClick={onClick}
+            />
+        );
+    }
+
+    function PrevArrow(props) {
+        const {className, style, onClick} = props;
+        return (
+            <div
+                style={{display: 'none'}}
+                onClick={onClick}
+            />
+        );
+    }
+
     const settings = {
         slidesToShow: 7,
-        slidesToScroll: 4,
-        dots: false,
+        slidesToScroll: 0,
+        dots: true,
         infinite: false,
         speed: 500,
         rtl: false,
@@ -117,62 +150,67 @@ function MusicList({musics, title, showAll}) {
         pauseOnHover: true,
         lazyLoad: true,
         centerMode: false,
+        nextArrow: <NextArrow/>,
+        prevArrow: <PrevArrow/>,
         responsive: [
             {
-                breakpoint: 1044,
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 6,
+                    slidesToScroll: 4,
+                    infinite: false,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 992,
                 settings: {
                     slidesToShow: 5,
-                    slidesToScroll: 4,
+                    slidesToScroll: 5,
                     infinite: true,
                     dots: true
                 }
             },
             {
-                breakpoint: 1024,
+                breakpoint: 768,
                 settings: {
-                    slidesToShow: 5,
+                    slidesToShow: 4,
                     slidesToScroll: 4,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 2,
                     initialSlide: 0
                 }
             },
             {
-                breakpoint: 480,
+                breakpoint: 544,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2
                 }
             },
-            {
-                breakpoint: 375,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
         ]
+
     };
 
     return (
         <>
 
-            <Container fluid className='pt-2'>
+            <Container fluid className='pt-2 mb-3'>
                 <Row className={slider.rtl}>
                     <div className="col-6 ">
-                        <h6>{title}</h6>
+                        <i className='fa fa-music d-inline-block f12'/>
+                        <h6 className='d-inline-block pr-2 f11'>{title}</h6>
                     </div>
                     <div className="col-6 text-left">
-                        <Link href={`tag/m/[category]`} as={`tag/m/${showAll}`}>
-                            <a className={`${slider.color_orange}`}> مشاهده همه</a>
-                        </Link>
+                        {
+                            sub ?
+                                <Link href={`/tag/m/sub/[category]`} as={`/tag/m/sub/${showAll}`}>
+                                    <a className={`${slider.color_orange}`}> مشاهده همه</a>
+                                </Link>
+                                :
+                                <Link href={`/tag/m/[category]`} as={`/tag/m/${showAll}`}>
+                                    <a className={`${slider.color_orange}`}> مشاهده همه</a>
+                                </Link>
+                        }
+
                     </div>
                 </Row>
                 <div className={`progress ${slider.rtl}`} style={{height: '2px', backgroundColor: '#d4d5d5'}}>

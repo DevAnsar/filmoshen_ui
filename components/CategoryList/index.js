@@ -1,7 +1,7 @@
-import React ,{useEffect} from 'react';
+import React ,{useState} from 'react';
 import useSWR, {useSWRPages} from "swr/dist/index";
 import fetcher from "../../lib/fetcher";
-import useOnScreen from "../../hooks/use-on-screen";
+import useOnScreen from "../../hooks/useOnScreen";
 import Container from "react-bootstrap/Container";
 
 import rtl from '../../style/reboot.module.css';
@@ -11,8 +11,7 @@ import HorizontalList2 from "./../../components/index/HorizontalList2";
 
 export default function CategoryList({categorySlug}) {
 
-
-
+    const [cat_title,setCatTitle]=useState('');
     const {pages, isLoadingMore, loadMore, pageSWRs, pageCount} = useSWRPages(
         `category_movies_${categorySlug}`,
         ({offset, withSWR}) => {
@@ -27,8 +26,8 @@ export default function CategoryList({categorySlug}) {
             // console.log('data', data);
             if (!data) return null;
 
-            const {movies , categories} = data;
-            console.log('movies', categories);
+            const {movies , categories,cat_title} = data;
+            // console.log('data', data);
 
             // return null;
             let categoryMovies = movies.data.map(movie => (
@@ -40,35 +39,21 @@ export default function CategoryList({categorySlug}) {
                                  movies={result.movies}/>
             ));
 
+            setCatTitle(cat_title);
+            // console.log('categoryMovies', categoryMovies);
             return [...videoCats,...categoryMovies];
 
         },
         SWR => SWR.data.movies.next_page_url,
-        []
+        [categorySlug]
     );
 
-
-    const [infiniteScrollEnabled, setInfiniteScrollEnabled] = React.useState(
-        false
-    );
     const $loadMoreButton = React.useRef(null);
-    const infiniteScrollCount = React.useRef(0);
     const isOnScreen = useOnScreen($loadMoreButton, "200px");
 
     React.useEffect(() => {
-        if (!infiniteScrollEnabled || !isOnScreen) return;
-
-        loadMore();
-
-        const count = infiniteScrollCount.current;
-
-        if (count + 1 === 3) {
-            setInfiniteScrollEnabled(false);
-            infiniteScrollCount.current = 0;
-        } else {
-            infiniteScrollCount.current = count + 1;
-        }
-    }, [infiniteScrollEnabled, isOnScreen]);
+        if (isOnScreen) loadMore();
+    }, [isOnScreen]);
 
 
     return (
@@ -76,7 +61,10 @@ export default function CategoryList({categorySlug}) {
 
             <div className={`container-fluid px-0 pb-5 ${rtl.rtl}`} style={{backgroundColor: '#fbfbfd'}}>
                 <div className="container-fluid pt-4 px-md-5 px-lg-5 ">
-                    <h6 className="mt-3">همه ی سریال های خارجی</h6>
+                    <h6 className="mt-3">همه ی
+                        {` ${cat_title} `}
+                        ها
+                    </h6>
 
                     <div className="row">
                         {
@@ -86,18 +74,21 @@ export default function CategoryList({categorySlug}) {
                 </div>
 
                 <Container>
-                    <div className='row justify-content-center my-5'>
-                        <button
-                            ref={$loadMoreButton}
-                            className="col-xl-2 col-md-6 col-6 btn btn-warning  py-2 px-4"
-                            disabled={isLoadingMore}
-                            onClick={() => {
-                                loadMore();
-                                setInfiniteScrollEnabled(true);
-                            }}
-                        >
-                            نمایش بیشتر
-                        </button>
+                    <div className='row justify-content-center my-5' ref={$loadMoreButton} >
+                        {
+                            isLoadingMore ? 'در حال دریافت...' : ''
+                        }
+                        {/*<button*/}
+                            {/*ref={$loadMoreButton}*/}
+                            {/*className="col-xl-2 col-md-6 col-6 btn btn-warning  py-2 px-4"*/}
+                            {/*disabled={isLoadingMore}*/}
+                            {/*onClick={() => {*/}
+                                {/*loadMore();*/}
+                                {/*setInfiniteScrollEnabled(true);*/}
+                            {/*}}*/}
+                        {/*>*/}
+                            {/*نمایش بیشتر*/}
+                        {/*</button>*/}
                     </div>
                 </Container>
             </div>

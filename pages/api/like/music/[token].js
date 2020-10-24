@@ -8,7 +8,6 @@ const musicLike= async (req,res)=>{
             res.json({data:response.data,})
         })
         .catch(err=>console.log(err))
-
 };
 
 export default musicLike;

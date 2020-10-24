@@ -1,17 +1,16 @@
 {
-  "name": "filimo",
+  "name": "filmoshen",
   "version": "1.0.0",
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
     "start": "node server.js"
   },
-
-  "main":"server.js",
+  "main": "server.js",
+  "homepage": "http://filmoshen.com",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "axios": "^0.19.2",
@@ -25,7 +24,11 @@
     "material-expansion-panel": "^1.0.0",
     "next": "latest",
     "next-fonts": "^1.1.0",
+    "next-images": "^1.4.0",
     "next-redux-wrapper": "^2.0.0",
+    "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "rc-menu": "^8.3.1",
     "react": "16.12.0",
     "react-audio-player": "^0.13.0",
     "react-bootstrap": "^1.0.1",
@@ -44,8 +47,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "5.0.0",
     "stylis-plugin-rtl": "1.0.0",
-    "swr": "^0.2.0",
-    "zarinpal-checkout": "^0.2.7"
+    "swr": "^0.2.0"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "1.10.6"

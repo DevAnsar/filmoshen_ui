@@ -49,10 +49,10 @@ function Comment({comment}) {
     return (
         <>
             <div className="row py-2 px-2 ">
-                <div className="col-12 col-md-2 col-lg-1 mt-2">
+                <div className="col-2 col-md-2 col-lg-1 mt-2">
                     <img src="/img/man%20(3).png" className="img-fluid d-block mx-lg-0 mx-md-0 mx-auto"/>
                 </div>
-                <div className="col-12 col-md-7 col-lg-9 mt-2">
+                <div className="col-7 col-md-7 col-lg-9 mt-2">
                     <p className="font-s pt-xl-1 pt-md-1 pt-2">
                             <span className="ml-3">
                                 {
@@ -90,7 +90,7 @@ function Comment({comment}) {
 
                                         <path
                                             d="M17.497 3.604l-7.54 7.54a2.72 2.72 0 0 0-.79 1.92v13.598a2.73 2.73 0 0 0 2.722 2.722h12.25a2.741 2.741 0 0 0 2.505-1.647l4.437-10.358c1.143-2.695-.83-5.69-3.757-5.69h-7.69l1.293-6.234a2.052 2.052 0 0 0-.558-1.865 2.025 2.025 0 0 0-2.872.014zM3.722 29.384a2.73 2.73 0 0 0 2.723-2.722v-10.89a2.73 2.73 0 0 0-2.723-2.722A2.73 2.73 0 0 0 1 15.772v10.89a2.73 2.73 0 0 0 2.722 2.722z"
-                                            id="icon-thumbs-up-new"></path>
+                                            id="icon-thumbs-up-new" />
 
                                 </svg>
                                 </span>
@@ -114,7 +114,7 @@ function Comment({comment}) {
                                         viewBox="0 0 32 32">
                                         <path
                                             d="M14.906 28.78l7.527-7.54a2.72 2.72 0 0 0 .79-1.92V5.722A2.73 2.73 0 0 0 20.5 3H8.264a2.708 2.708 0 0 0-2.49 1.647L1.335 15.005c-1.157 2.695.817 5.69 3.743 5.69h7.69l-1.293 6.234c-.136.68.068 1.374.558 1.864.803.79 2.083.79 2.872-.013zM28.681 3a2.73 2.73 0 0 0-2.722 2.722v10.89a2.73 2.73 0 0 0 2.722 2.722 2.73 2.73 0 0 0 2.722-2.723V5.722A2.73 2.73 0 0 0 28.681 3z"
-                                            id="icon-thumbs-down-new"></path>
+                                            id="icon-thumbs-down-new" />
                                     </svg>
                                 </span>
                             {/*<i className='far fa-thumbs-up mr-1 text-success'/>*/}

@@ -3,7 +3,6 @@ import reboot from './../style/reboot.module.css';
 import initialize from "../utils/initialize";
 import {connect} from 'react-redux';
 import axios from 'axios';
-import Link from 'next/link';
 import {useRouter} from 'next/router'
 import ToastsAlert from "../components/ToastsAlert";
 
@@ -12,7 +11,7 @@ function PackageList({isAuthenticated}) {
     const router = useRouter();
     const [loading, SetLoading] = useState(true);
     const [subscribes, SetSubscribes] = useState([]);
-    const [userStatus, SetUserStatus] = useState(false);
+    const [userStatus, SetUserStatus] = useState(-1);
 
     const [alert, setAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -21,16 +20,19 @@ function PackageList({isAuthenticated}) {
     useEffect(() => {
         console.log('useEffect PackageList');
 
-        axios.get(`/api/subscribe`)
-            .then(response => {
-                console.log(response);
-                SetSubscribes(response.data.subscribe);
-                SetUserStatus(response.data.user_status);
-                SetLoading(false);
-            })
-            .catch(err => {
-                console.log(err)
-            });
+        async function getSubscribe(){
+            await  axios.get(`/api/subscribe`)
+                .then(response => {
+                    console.log('/api/subscribe',response);
+                    SetSubscribes(response.data.subscribe);
+                    SetUserStatus(response.data.user_status);
+                    SetLoading(false);
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        }
+       getSubscribe();
 
     }, []);
 
@@ -57,16 +59,22 @@ function PackageList({isAuthenticated}) {
     };
 
     function paySubscribe(id) {
-        if (!userStatus) {
+
+        if (userStatus === 1) {
 
             setAlertMessage('شما هنوز اشتراک فعال دارید.');
             setAlertColor('#35fd5a');
             setAlert(true);
             alertTimeOutHandle();
 
-        } else {
+        } else if(userStatus === 0) {
 
             router.push(`/subscribe/${id}`);
+        }else{
+            setAlertMessage('ابتدا وارد شوید');
+            setAlertColor('#35fd5a');
+            setAlert(true);
+            alertTimeOutHandle();
         }
     };
 

@@ -1,9 +1,10 @@
 import reboot from './../style/reboot.module.css';
 import initialize from "../utils/initialize";
 import {connect} from 'react-redux';
+import axios from "axios/index";
 
 
-function AboutUs() {
+function AboutUs({pageData}) {
 
 
 
@@ -13,51 +14,25 @@ function AboutUs() {
             <div className={`container-fluid px-lg-5 px-md-5 py-5 ${reboot.rtl}`}>
 
                 <h5 className="">درباره ما</h5>
-                <p className=" text-justify pt-4">مؤسسه‌ فرهنگی و دیجیتال آینه جادو به عنوان یک موسسه فرهنگی و دیجیتال،
-                    مفتخر
-                    است که «فیلمنت» را به عنوان اولین سامانه VOD کشور معرفی نماید.</p>
-                <p className=" text-justify pt-4">مؤسسه‌ فرهنگی و دیجیتال آینه جادو به عنوان یک موسسه فرهنگی و دیجیتال،
-                    مفتخر
-                    است که «فیلمنت» را به عنوان اولین سامانه VOD کشور معرفی نماید.</p>
-                <p className=" text-justify pt-4">مؤسسه‌ فرهنگی و دیجیتال آینه جادو به عنوان یک موسسه فرهنگی و دیجیتال،
-                    مفتخر
-                    است که «فیلمنت» را به عنوان اولین سامانه VOD کشور معرفی نماید.</p>
-                <p className=" text-justify pt-4">فیلم نت اولین سامانه VOD در کشور است که با توسعه‌ نسل سوم و چهارم
-                    اینترنت
-                    «3G
-                    و 4G»، فضایی را برای دانلود و تماشای آنلاین فیلم و سریال های ایرانی و خارجی با زیر نویس فارسی و
-                    دوبله و
-                    به طور قانونی فراهم کرده است.</p>
-                <p className=" text-justify pt-4">فیلم نت اولین سامانه VOD در کشور است که با توسعه‌ نسل سوم و چهارم
-                    اینترنت
-                    «3G
-                    و 4G»، فضایی را برای دانلود و تماشای آنلاین فیلم و سریال های ایرانی و خارجی با زیر نویس فارسی و
-                    دوبله و
-                    به طور قانونی فراهم کرده است.</p>
-                <p className=" text-justify pt-4">فیلم نت اولین سامانه VOD در کشور است که با توسعه‌ نسل سوم و چهارم
-                    اینترنت
-                    «3G
-                    و 4G»، فضایی را برای دانلود و تماشای آنلاین فیلم و سریال های ایرانی و خارجی با زیر نویس فارسی و
-                    دوبله و
-                    به طور قانونی فراهم کرده است.</p>
-                <p className=" text-justify pt-4">فیلم نت اولین سامانه VOD در کشور است که با توسعه‌ نسل سوم و چهارم
-                    اینترنت
-                    «3G
-                    و 4G»، فضایی را برای دانلود و تماشای آنلاین فیلم و سریال های ایرانی و خارجی با زیر نویس فارسی و
-                    دوبله و
-                    به طور قانونی فراهم کرده است.</p>
-                <p className=" text-justify pt-4">فیلم های سینمایی و سریال های ایرانی و خارجی موجود در آرشیو فیلم نت به
-                    عنوان
-                    بهترین سایت دانلود فیلم هر روز در حال گسترش و بروز رسانی است که علاوه بر فیلم ها و سریال‌های جدید
-                    دسته‌های انیمیشن، فیلم تئاتر، مستند و فیلم کوتاه را نیز پوشش می دهد.</p>
+                <div className="bg-white rounded pb-5" style={{height: '100%'}}
+                     dangerouslySetInnerHTML={{__html: pageData}}/>
+
             </div>
         </>
     )
 }
 
-AboutUs.getInitialProps = function (ctx) {
+AboutUs.getInitialProps = async (ctx) =>{
     initialize(ctx);
+    let page = '';
+    await axios.get(`${process.env.BaseUrl}/api/v1/aboutPage`)
+        .then(res => {
+            page = res.data.data
+        }).catch(err => console.log(err));
 
+    return {
+        pageData: page
+    }
 
 };
 

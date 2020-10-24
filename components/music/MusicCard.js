@@ -13,15 +13,24 @@ export const MusicCard = ({music}) => {
                         <img src={`${process.env.BaseUrl}${music.cover}`} className="img-fluid rounded"/>
                         <div className={` ${MovieCardStyle.itemBody}`}>
                             <div className={`${MovieCardStyle.hvrbox_text}`}>
-                                <p className={`border bg-white pt-1 w-75 mx-auto color-orange ${MovieCardStyle.hvrbox_score} ${slider.color_orange}`}
-                                   style={{borderRadius: '15px'}}>
-                                    <i className='fas fa-heart mr-1'></i>
-                                    88%
-                                </p>
+
                                 <p className="pt-1">
                                     {music.title}
                                 </p>
-                                <p className="pt-1">2020 - وحشت - هیجان انگیز</p>
+                                <p className="pt-1">
+                                    {music.singers?.map(singer=>{
+                                        return(
+                                            <>
+                                                {
+                                                    singer.name
+                                                }
+                                                {music.singers.length>1?"-":''}
+                                            </>
+
+                                        )
+                                    })}
+                                </p>
+
                             </div>
                         </div>
                     </div>

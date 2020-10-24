@@ -8,8 +8,9 @@ import Modal from 'react-modal';
 import PlayerPage from "./Player";
 import player from './../../style/player.module.css';
 import reboot from './../../style/reboot.module.css';
-
-function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_access}) {
+import ToastsAlert from "../ToastsAlert";
+// import style from '@zeit/next-css';
+function MovieBanner({movie, actors, isAuthenticated, bookmark, movie_access}) {
 
     const [mark, setMark] = useState(0);
     const [mark_loading, setMarkLoading] = useState(false);
@@ -21,11 +22,23 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
     const [likeCount, setLikeCount] = useState(0);
     const [dislikeCount, setDisLikeCount] = useState(0);
 
-    const [player_mode, setPlayerMode] = useState('config');
+    const [player_mode, setPlayerMode] = useState('link');//'config'
     const [player_config_json, setPlayerConfigJson] = useState('');
 
     const [imdb_rating, setImdb_rating] = useState('');
     const [rotten_tomatoes_rating, setRotten_tomatoes_rating] = useState('');
+
+    const [alert, setAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertColor, setAlertColor] = useState('#fd3746');
+    let commentMessageTimeOut;
+
+    function alertTimeOutHandle() {
+        clearTimeout(commentMessageTimeOut);
+        commentMessageTimeOut = setTimeout(() => {
+            setAlert(false);
+        }, 4000);
+    }
 
     const customStyles = {
         content: {
@@ -35,7 +48,7 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
-            width: '60%',
+            width: '85%',
             border: 'none',
             background: 'none',
             zIndex: '100000000',
@@ -83,94 +96,188 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
 
     async function getPlayerConfigJson() {
 
-        if (player_config_json === '') {
-            await axios.get(`${process.env.ArvanApi}/videos/${movie.link}`, {
-                headers: {
-                    'Authorization': process.env.ArvanApiKey,
-                    'Accept': 'application/json'
-                }
-            })
-                .then(res => {
-                    console.log(res.data.data.player_url);
+        if (isAuthenticated) {
+            if (player_config_json === '') {
+                // await axios.get(`${process.env.ArvanApi}/videos/${movie.link}`, {
+                //     headers: {
+                //         'Authorization': process.env.ArvanApiKey,
+                //         'Accept': 'application/json'
+                //     }
+                // })
+                //     .then(res => {
+                //         console.log(res.data.data.player_url);
+                //
+                //         let {player_url} = res.data.data;
+                //         setPlayerConfigJson(player_url);
+                //         setIsOpen(true);
+                //
+                //     }).catch(err => {
+                //         console.log(err);
+                //         setAlertMessage('متاسفیم،مشکلی در پخش فیلم پیش آمد');
+                //         setAlert(true);
+                //         alertTimeOutHandle();
+                //     })
 
-                    let {player_url} = res.data.data;
-                    setPlayerConfigJson(player_url);
-                    setIsOpen(true);
+                // await axios.get(`http://2.187.209.55:8080/video/stream/mp4/test-145MG`)
+                //     .then(res => {
+                //         console.log(res);
+                //
+                //         // let {player_url} = res.data.data;
+                //         // setPlayerConfigJson(player_url);
+                //
+                //         // setIsOpen(true);
+                //
+                //     }).catch(err => {
+                //         console.log(err);
+                //         setAlertMessage('متاسفیم،مشکلی در پخش فیلم پیش آمد');
+                //         setAlert(true);
+                //         alertTimeOutHandle();
+                //     })
 
-                }).catch(err => {
-                    console.log(err);
-                    return false;
-                })
+                // await axios.post(`http://2.187.209.55:8080/video/stream/mp4/test-145MG`)
+                //     .then(res => {
+                //         console.log(res);
+                //
+                //         // let {player_url} = res.data.data;
+                //         // setPlayerConfigJson(player_url);
+                //
+                //         // setIsOpen(true);
+                //
+                //     }).catch(err => {
+                //         console.log(err);
+                //         setAlertMessage('متاسفیم،مشکلی در پخش فیلم پیش آمد');
+                //         setAlert(true);
+                //         alertTimeOutHandle();
+                //     });
 
-        }else {
-            console.log('set player_url in state');
-            setIsOpen(true);
+                setPlayerConfigJson('http://2.187.209.55:8080/video/stream/mp4/test-145MG');
+                setIsOpen(true);
+            } else {
+                console.log('set player_url in state');
+                setIsOpen(true);
+            }
+        } else {
+            setAlertMessage(' ابتدا باید وارد شوید');
+            setAlert(true);
+            alertTimeOutHandle();
         }
     }
 
     function handleBookmark(status) {
 
-        setMarkLoading(true);
-        if (status) {
-            axios.get(`${process.env.BaseUrl}/api/v1/addBookmark/${movie.token}?api_token=${token}`)
-                .then(response => {
+        if (isAuthenticated) {
+            setMarkLoading(true);
+            if (status) {
+                axios.get(`/api/addBookmark/${movie.token}`)
+                    .then(response => {
 
-                    console.log(response)
-                    if (response.data.status === 1) {
-                        setMark(status);
-                        setMarkLoading(false)
-                    }
-                })
-                .catch(err => console.log(err));
-        }
-        if (!status) {
-            axios.get(`${process.env.BaseUrl}/api/v1/removeBookmark/${movie.token}?api_token=${token}`)
-                .then(response => {
-                    console.log(response)
-                    if (response.data.status === 1) {
-                        setMark(status);
-                        setMarkLoading(false)
-                    }
-                })
-                .catch(err => console.log(err));
+                        console.log(response);
+                        if (response.data.status) {
+                            setMark(status);
+                            setMarkLoading(false)
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+            if (!status) {
+                axios.get(`/api/removeBookmark/${movie.token}`)
+                    .then(response => {
+                        console.log(response);
+                        if (response.data.status) {
+                            setMark(status);
+                            setMarkLoading(false)
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+
+        } else {
+            setAlertMessage(' ابتدا باید وارد شوید');
+            setAlert(true);
+            alertTimeOutHandle();
         }
 
     }
 
     function handleLike(movie_token) {
 
-        // console.log(comment_id);
-        axios.get(`/api/movieLike/${movie_token}/like`)
-            .then(res => {
-                console.log('like', res.data);
+        if (isAuthenticated) {
+            // console.log(comment_id);
+            axios.get(`/api/movieLike/${movie_token}/like`)
+                .then(res => {
+                    console.log('like', res.data);
+                    let newLikeStatus = res.data.like_status;
+                    let counts = res.data.counts;
+                    setLikeStatus(newLikeStatus);
+                    setLikeCount(counts.likeCount);
+                    setDisLikeCount(counts.dislikeCount);
+                })
+                .catch(err => console.log(err))
+
+        } else {
+            setAlertMessage(' ابتدا باید وارد شوید');
+            setAlert(true);
+            alertTimeOutHandle();
+        }
+    }
+
+    function handleDisLike(movie_token) {
+
+        if (isAuthenticated) {
+            // console.log(comment_id)
+            axios.get(`/api/movieLike/${movie_token}/dislike`).then(res => {
+                console.log('dislike', res.data.like_status);
                 let newLikeStatus = res.data.like_status;
                 let counts = res.data.counts;
                 setLikeStatus(newLikeStatus);
                 setLikeCount(counts.likeCount);
                 setDisLikeCount(counts.dislikeCount);
-            })
-            .catch(err => console.log(err))
+            }).catch(err => console.log(err))
+
+        } else {
+            setAlertMessage(' ابتدا باید وارد شوید');
+            setAlert(true);
+            alertTimeOutHandle();
+        }
     }
 
-    function handleDisLike(movie_token) {
-
-        // console.log(comment_id)
-        axios.get(`/api/movieLike/${movie_token}/dislike`).then(res => {
-            console.log('dislike', res.data.like_status);
-            let newLikeStatus = res.data.like_status;
-            let counts = res.data.counts;
-            setLikeStatus(newLikeStatus);
-            setLikeCount(counts.likeCount);
-            setDisLikeCount(counts.dislikeCount);
-        }).catch(err => console.log(err))
+    function showNoAuthAlert() {
+        setAlertMessage(' ابتدا باید وارد شوید');
+        setAlert(true);
+        alertTimeOutHandle();
     }
+
+
 
     return (
         <>
             <Container fluid className={` pb-5 ${movieStyle.movie} ${movieStyle.rtl}`}
-                       style={{backgroundImage: `url(${process.env.BaseUrl}${movie.poster})`, minHeight: '300px'}}>
+                       style={{minHeight: '300px'}}>
 
+                <div className='d-md-block d-none'  style={{
+                    backgroundImage:'url("'+`${process.env.BaseUrl+movie.poster}`+'")',
+                    width: "100%",
+                    left:0,
+                    right:0,
+                    top:0,
+                    bottom:0,
+                    position:'absolute',
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover"
+                }} />
 
+                <div className='d-md-none d-block'  style={{
+                    backgroundImage:'url("'+`${process.env.BaseUrl+movie.poster}`+'")',
+                    width: "100%",
+                    left:0,
+                    right:0,
+                    top:0,
+                    height:'300px',
+                    position:'absolute',
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover"
+                }} />
+                <ToastsAlert alert_show={alert} message={alertMessage} color={alertColor}/>
                 <div className={movieStyle.dark_bg}/>
                 <div className="row mt-4 pl-3 ">
                     <div className="col-md-4 col-lg-3 text-center ">
@@ -185,9 +292,7 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
 
                         <div className={`row pl-3 mt-4 ${movieStyle.font_ms}`}>
                             <div className='col-12'>
-                                {/*<p className="font-ms mr-3 d-inline-block">*/}
-                                {/*{movie.year}*/}
-                                {/*</p>*/}
+
                                 <p className="font-ms ml-3 d-inline-block">
                                     {movie.time}
                                     دقیقه
@@ -202,8 +307,16 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
                                 </p>
 
                                 <p className="font-ms mx-3 d-inline-block">
-                                    <i className="fas fa-heart mr-1"/>
-                                    {rotten_tomatoes_rating}
+                                    {
+                                        movie.score !== null ?
+                                            <>
+                                                <i className="fas fa-heart mr-1"/>
+                                                {movie.score}
+                                                {` % `}
+                                            </>
+                                            : ''
+                                    }
+
                                 </p>
 
                             </div>
@@ -221,16 +334,13 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
                                 {
                                     isAuthenticated ?
                                         <>
-                                            {/*<Link href={`/watch/${movie.token}`}>*/}
-                                            {/*<a>*/}
                                             <div onClick={() => {
                                                 getPlayerConfigJson()
                                             }}
                                                  type="button"
                                                  className="btn btn-success font-md">تماشا
                                             </div>
-                                            {/*</a>*/}
-                                            {/*</Link>*/}
+
                                         </>
                                         :
                                         <>
@@ -244,29 +354,21 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
                                         </>
                                 }
 
-                                {/*<button type="button" className="btn btn-outline-light font-md mr-3">دانلود</button>*/}
+                                <button type="button"
+                                        className="btn btn-outline-red  font-md mr-3 text-white"
+                                        onClick={() => {
+                                            isAuthenticated ?
+                                                mark ?
+                                                    handleBookmark(false)
+                                                    :
+                                                    handleBookmark(true)
+                                                :
+                                                showNoAuthAlert()
+                                        }}
 
-                                {
-                                    mark ?
-                                        <>
-                                            <button onClick={() => handleBookmark(false)} type="button"
-                                                    className="btn btn-success font-md mr-3">
-                                                {
-                                                    mark_loading ? '...' : 'نشان شده'
-                                                }
-                                            </button>
-                                        </>
-                                        :
-                                        <>
-                                            <button onClick={() => handleBookmark(true)} type="button"
-                                                    className="btn btn-outline-light font-md mr-3">
-
-                                                {
-                                                    mark_loading ? '...' : 'نشان کردن'
-                                                }
-                                            </button>
-                                        </>
-                                }
+                                >
+                                    <i className={`far fa-bookmark  text-center ${mark ? 'fa' : ''}`}/>
+                                </button>
 
 
                             </div>
@@ -332,7 +434,7 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
 
                                         <path
                                             d="M17.497 3.604l-7.54 7.54a2.72 2.72 0 0 0-.79 1.92v13.598a2.73 2.73 0 0 0 2.722 2.722h12.25a2.741 2.741 0 0 0 2.505-1.647l4.437-10.358c1.143-2.695-.83-5.69-3.757-5.69h-7.69l1.293-6.234a2.052 2.052 0 0 0-.558-1.865 2.025 2.025 0 0 0-2.872.014zM3.722 29.384a2.73 2.73 0 0 0 2.723-2.722v-10.89a2.73 2.73 0 0 0-2.723-2.722A2.73 2.73 0 0 0 1 15.772v10.89a2.73 2.73 0 0 0 2.722 2.722z"
-                                            id="icon-thumbs-up-new"></path>
+                                            id="icon-thumbs-up-new"/>
 
                                 </svg>
                                 </span>
@@ -356,7 +458,7 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
                                         viewBox="0 0 32 32">
                                         <path
                                             d="M14.906 28.78l7.527-7.54a2.72 2.72 0 0 0 .79-1.92V5.722A2.73 2.73 0 0 0 20.5 3H8.264a2.708 2.708 0 0 0-2.49 1.647L1.335 15.005c-1.157 2.695.817 5.69 3.743 5.69h7.69l-1.293 6.234c-.136.68.068 1.374.558 1.864.803.79 2.083.79 2.872-.013zM28.681 3a2.73 2.73 0 0 0-2.722 2.722v10.89a2.73 2.73 0 0 0 2.722 2.722 2.73 2.73 0 0 0 2.722-2.723V5.722A2.73 2.73 0 0 0 28.681 3z"
-                                            id="icon-thumbs-down-new"></path>
+                                            id="icon-thumbs-down-new"/>
                                     </svg>
                                 </span>
                                     {/*<i className='far fa-thumbs-up mr-1 text-success'/>*/}
@@ -394,18 +496,18 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
                         </button>
                     </div>
 
-                    <div className='card-body'>
+                    <div className='card-body p-0'>
                         {
                             isAuthenticated ?
                                 (movie_access && (
-                                        <Container className='p-5'>
+                                        <Container className='p-0'>
 
 
                                             {
                                                 player_mode === 'link' ?
 
                                                     <div className={`row ${player._window}`}>
-                                                        <PlayerPage url={movie.link}/>
+                                                        <PlayerPage url='https://video.kartoona.com/media/13343/playlist.m3u8'/>
                                                     </div>
 
                                                     :
@@ -461,7 +563,6 @@ function MovieBanner({movie, actors, isAuthenticated, bookmark, token, movie_acc
 const mapStateToProps = (state) => (
     {
         isAuthenticated: !!state.authentication.token,
-        token: state.authentication.token
     }
 );
 

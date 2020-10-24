@@ -4,15 +4,15 @@
 }
 
 
-.menuItem{
-    position: relative;
-    width: 180px;
-    height: 250px;
+.listItem{
+
+    width: 100%;
+    /*height: 250px;*/
     border-radius: 5px;
     overflow: hidden
 }
 
-.menuItem a{
+.listItem a{
     /*width: 100%;*/
     /*height: 100%;*/
     /*display: inline-block;*/
@@ -42,7 +42,7 @@
     opacity: 0;
 }
 
-.menuItem:hover .itemBody{
+.listItem:hover .itemBody{
     opacity: 1;
 }
 

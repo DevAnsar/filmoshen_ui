@@ -1,17 +1,9 @@
 import ProfileEdit from './../../../components/Account/pages/ProfileEdit';
 import axios from "axios/index";
-import {API} from "../../../config";
 import { connect } from 'react-redux';
 import initialize from "../../../utils/initialize";
-import Router from 'next/router';
 import unauthinticated from "../../UnAuth";
 function edit({user}) {
-
-    function redirect() {
-        setTimeout(()=>{
-            Router.push('/')
-        },2000)
-    }
     return (
         <>
         {(user && (

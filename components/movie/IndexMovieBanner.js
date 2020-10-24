@@ -4,99 +4,75 @@ import Container from 'react-bootstrap/Container';
 import movieStyle from '../../style/Movie.module.css';
 import {connect} from 'react-redux'
 
-function IndexMovieBanner({movie, imdb_rating, isAuthenticated, token, movie_access, actors}) {
+function IndexMovieBanner({slide, imdb_rating, isAuthenticated}) {
 
 
     useEffect(() => {
 
-    }, [movie]);
+    }, [slide]);
 
 
     return (
         <>
-            <Container fluid className={` pb-5 ${movieStyle.movie} ${movieStyle.rtl}`}
-                       style={{backgroundImage: `url(${process.env.BaseUrl}${movie.poster})`, minHeight: '300px'}}>
-
+            <Container fluid className={`sliderContainer pb-5 ${movieStyle.movie} ${movieStyle.rtl}`}>
+                {/*backgroundImage: `url(${process.env.BaseUrl}${slide.image?slide.image:slide.movie.poster})`,*/}
+                <img className={`slider-image`}  src={`${process.env.BaseUrl}${slide.image?slide.image:slide.movie.poster}`}/>
 
                 <div className={movieStyle.dark_bg}/>
-                <div className="row mt-4 pl-3 ">
-                    <div className="col-md-3 text-center">
-                        <img src={`${process.env.BaseUrl}${movie.cover}`} className={movieStyle.movie_cover}/>
-                    </div>
+                <div className="row mt-4 pl-3 " style={{position: 'absolute', bottom: '0',height: '60%', width: '100%',zIndex: '12'}}>
 
-                    <div className=" col-md-9 text-white" style={{zIndex: '12', position: 'relative', bottom: '0%'}}>
+
+                    <div className=" col-12 text-white " >
+                        {
+                            slide.name_image ?
+                                <div className="row pl-3 mt-4 d-none d-md-block" >
+                                    <div className={`col-12`}>
+                                        <img className={`sliderNameImage`} src={`${process.env.BaseUrl}${slide.name_image}`} />
+                                    </div>
+                                </div>
+                                :''
+                        }
+
+
                         <div className="row pl-3 mt-4">
-                            <h5 className="text-white">
-                                {movie.title}
-                            </h5>
+                            <div className={`col-12 pr-5`}style={{position:'absolute',bottom:'75px'}}>
+                                <h5 className="text-white">
+                                    {slide.description}
+                                </h5>
+                            </div>
                         </div>
 
 
                         <div className="row pl-3 mt-4">
-                            {
-                                isAuthenticated ?
-                                    <>
-                                        <Link href={`/movie/[token]`} as={`/movie/${movie.token}`}>
-                                            <a>
-                                                <div
-                                                    className="btn  font-md px-3 btn-outline-info btn-sm ">تماشا
-                                                </div>
-                                            </a>
-                                        </Link>
-                                    </>
-                                    :
-                                    <>
-                                        <Link href={`/login`}>
-                                            <a>
-                                                <button type="button" className="btn btn-warning font-md">ورود و تماشا
-                                                </button>
-                                            </a>
-                                        </Link>
-                                    </>
-                            }
+                            <div className={`col-12 pr-5`} style={{position:'absolute',bottom:'30px'}}>
+                                {
+                                    isAuthenticated ?
+                                        <>
+                                            <Link href={`/movie/[token]`} as={`/movie/${slide.movie.token}`}>
+                                                <a>
+                                                    <div
+                                                        className="btn  font-md px-3 btn-outline-info btn-lg ">تماشا
+                                                    </div>
+                                                </a>
+                                            </Link>
+                                        </>
+                                        :
+                                        <>
+                                            <Link href={`/login`}>
+                                                <a>
+                                                    <button type="button" className="btn btn-warning font-md">ورود و
+                                                        تماشا
+                                                    </button>
+                                                </a>
+                                            </Link>
+                                        </>
+                                }
+                            </div>
 
                             {/*<button type="button" className="btn btn-outline-light font-md mr-3">دانلود</button>*/}
 
 
                         </div>
-
-                        {/*< div className="row pl-3 mt-4">*/}
-                        {/*<p className="font-s"> ستارگان :*/}
-                        {/*{*/}
-                        {/*actors?.map(actor => {*/}
-                        {/*return (*/}
-                        {/*<span style={{display: 'inline-flex'}} key={actor.id} className="mx-2">*/}
-                        {/*<Link href='/crew/[slug]' as={`/crew/${actor.slug}`}>*/}
-                        {/*<a>*/}
-                        {/*{actor.name}*/}
-                        {/*</a>*/}
-                        {/*</Link>*/}
-                        {/*</span>*/}
-                        {/*)*/}
-                        {/*})*/}
-                        {/*}*/}
-                        {/*</p>*/}
-                        {/*</div>*/}
-
-                        <div className="row pl-3 mt-4">
-
-                            {/*{*/}
-                            {/*movie.age ?*/}
-                            {/*<>*/}
-                            {/*<span className="badge badge-warning ">*/}
-                            {/*<img src={`${process.env.BaseUrl}${movie.age?.icon}`}*/}
-                            {/*className={`${movieStyle.ageIcon}`}/>*/}
-                            {/*</span>*/}
-                            {/*< span className={` mr-2 ${movieStyle.font_ms} `}>*/}
-                            {/*{movie.age?.title}*/}
-                            {/*</span>*/}
-                            {/*</>*/}
-                            {/*: ''*/}
-                            {/*}*/}
-
-
-                        </div>
-
 
                     </div>
                 </div>

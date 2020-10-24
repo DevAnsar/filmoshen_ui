@@ -51,6 +51,13 @@ const authenticate2 = (api_token , callback='/') => {
 
     };
 };
+const authenticate3 = (api_token) => {
+    return (dispatch) => {
+        setCookie('token', api_token);
+        dispatch({type: AUTHENTICATE, payload: api_token});
+
+    };
+};
 
 // gets the token from the cookie and saves it in the store
 const reauthenticate = (token) => {
@@ -72,6 +79,7 @@ const deauthenticate = () => {
 export default {
     authenticate,
     authenticate2,
+    authenticate3,
     reauthenticate,
     deauthenticate,
 };

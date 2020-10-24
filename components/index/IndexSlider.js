@@ -8,7 +8,8 @@ import IndexMovieBanner from '../movie/IndexMovieBanner';
 
 const Slide =({movie})=>{
     return(
-        <div className={indexSliderStyle.sliderHeight}  style={{backgroundImage:`url(${process.env.BaseUrl}${movie.poster})`}}>
+        <div className={indexSliderStyle.sliderHeight}
+             style={{backgroundImage:`url(${process.env.BaseUrl}${movie.poster})`}}>
             {movie.title}
         </div>
     )
@@ -43,7 +44,7 @@ function IndexSlider() {
         slidesToShow: 1,
         slidesToScroll: 1,
         rtl: true,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 5000,
         pauseOnHover: true,
         nextArrow: <NextArrow />,
@@ -60,14 +61,14 @@ function IndexSlider() {
     return(
         <div className='mb-4' >
 
-            {/*{*/}
-                {/*console.log(data)*/}
-            {/*}*/}
+            {
+                // console.log('slide data',data)
+            }
             <Slider {...settings}>
                 {data?.sliders.map(slide=>{
                     // console.log(slide);
                     // return <Slide key={slide.id} movie={slide}/>
-                    return <IndexMovieBanner key={slide.token} movie={slide}  />
+                    return slide ? <IndexMovieBanner key={slide.token} slide={slide}  />:'';
                 })}
             </Slider>
         </div>

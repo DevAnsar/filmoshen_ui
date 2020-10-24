@@ -1,10 +1,12 @@
 import React , {useState} from 'react';
 import Downloader from "js-file-downloader";
-import { ProgressBar} from 'react-bootstrap';
+import {ProgressBar, Spinner} from 'react-bootstrap';
 
-function DownloadBox({convertInnfo ,mp4Audios,filename}) {
+function DownloadBox({convertInnfo ,mp4Audios,filename,m_loading}) {
 
     const [downloadingPercentage, setDownloadingPercentage] = useState(0);
+
+    const AccessAudioBitrate=[128,320];
     function musicDownload(fileUrl,bitrate) {
 
         let fileName=`${filename}_${bitrate}.mp3`;
@@ -31,29 +33,40 @@ function DownloadBox({convertInnfo ,mp4Audios,filename}) {
     };
 
     return(
-        <div className="row bg-light py-3 my-4">
-
+        <div className="row bg-light py-3 my-4 justify-content-center">
 
             {
-                convertInnfo.map((item, index) => {
-
-                    return (
-                        <div key={index} className="col-3  text-center  pb-2">
-                            <a
-                                onClick={() => {
-                                    musicDownload(mp4Audios[index],item.audio_bitrate)
-                                }}
-                                className="btn btn-red font-s justify-content-center w-100">
-                                <i className='fas fa-download mr-1 py-1 px-1'/> دانلود با کیفیت
-                                {
-                                    item.audio_bitrate
-                                }
-                            </a>
+                m_loading? <>
+                        <div className={`col-12 justify-content-center`} style={{textAlign:'center'}}>
+                            <Spinner animation="border" variant="secondary" />
+                            <span style={{display:'block'}} className={`f7 mt-2 text-secondary`}>در حال دریافت</span>
                         </div>
-                    )
-                })
+                    </> :
+
+                        convertInnfo.map((item, index) => {
+                        return (
+                            AccessAudioBitrate.includes(item.audio_bitrate)?
+                                <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3  text-center  pb-2">
+                                    <a
+                                        onClick={() => {
+                                            musicDownload(mp4Audios[index],item.audio_bitrate)
+                                        }}
+                                        className="btn btn-red font-s justify-content-center w-100">
+                                        <i className='fas fa-download mr-1 py-1 px-1'/> دانلود با کیفیت
+                                        {
+                                            item.audio_bitrate
+                                        }
+                                    </a>
+                                </div>
+                                :
+                                ''
+                        )
+                    })
+
 
             }
+
+
 
 
             {/*<div className="col-12 text-center mt-2">*/}

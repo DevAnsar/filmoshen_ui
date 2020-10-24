@@ -13,8 +13,9 @@ import {Provider} from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 import {initStore} from '../redux';
 import Master from "../components/Master";
-
-export default withRedux(initStore, {debug: true})(
+import NextNProgress from './../components/NextNProgress';
+import 'rc-menu/assets/index.css';
+export default withRedux(initStore, {debug: false})(
     class MyApp extends App {
 
 
@@ -32,13 +33,20 @@ export default withRedux(initStore, {debug: true})(
             const {Component, pageProps, store} = this.props;
 
             return (
-                <Container>
+                <>
                     <Provider store={store}>
                         <Master>
+                            <NextNProgress
+                                color="#29D"
+                                startPosition={0.3}
+                                stopDelayMs={200}
+                                height="3"
+                                options={{ easing: 'ease', speed: 1000 }}
+                            />
                             <Component {...pageProps} />
                         </Master>
                     </Provider>
-                </Container>
+                </>
             )
         }
     }

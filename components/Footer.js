@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
 import reboot from '../style/reboot.module.css';
+import Link from 'next/link';
 
 export const initialFooter = {
     name: 'ansar',
@@ -24,13 +25,17 @@ const Footer = ({site_name, footer_logo, footer_description, socials, mobile_app
 
             <Row>
                 <div className="col-12 col-md-8 mt-2">
-                    <img src={`${process.env.BaseUrl}${footer_logo}`} className="img-fluid d-block "
-                         style={{width: '150px', height: '100px'}}/>
+                    <Link href={`/`}>
+                        <a>
+                            <img src={`${process.env.BaseUrl}${footer_logo}`} className="img-fluid d-block "
+                                 style={{width: '100px'}}/>
+                        </a>
+                    </Link>
 
                     <div className="pt-3 pl-md-3 pl-lg-3 text-justify text-dark"
                          dangerouslySetInnerHTML={{__html: footer_description}}/>
                 </div>
-                <div className="col-12 col-md-4 mt-3" style={{textAlign:'center'}}>
+                <div className="col-12 col-md-4 mt-3" style={{textAlign: 'center'}}>
                     <h6 className="mb-0">
                         <i className='fas fa-mobile-alt mr-1' style={{fontSize: '16px'}}/>
                         {`اپلیکیشن های `}
@@ -54,24 +59,24 @@ const Footer = ({site_name, footer_logo, footer_description, socials, mobile_app
 
 
             {/*<Row className=" justify-content-center mt-1 mt-md-5 mt-lg-5">*/}
-                {/*<nav className="navbar navbar-expand-sm d-none d-sm-block">*/}
+            {/*<nav className="navbar navbar-expand-sm d-none d-sm-block">*/}
 
-                    {/*<ul className="navbar-nav">*/}
-                        {/*<li className="nav-item">*/}
-                            {/*<a className="nav-link text-dark" href="#">درباره ما</a>*/}
-                        {/*</li>*/}
-                        {/*<li className="nav-item">*/}
-                            {/*<a className="nav-link text-dark" href="#">تماس با ما</a>*/}
-                        {/*</li>*/}
-                        {/*<li className="nav-item">*/}
-                            {/*<a className="nav-link text-dark" href="#">فیلم ها</a>*/}
-                        {/*</li>*/}
-                        {/*<li className="nav-item">*/}
-                            {/*<a className="nav-link text-dark" href="#">خرید اشتراک</a>*/}
-                        {/*</li>*/}
-                    {/*</ul>*/}
+            {/*<ul className="navbar-nav">*/}
+            {/*<li className="nav-item">*/}
+            {/*<a className="nav-link text-dark" href="#">درباره ما</a>*/}
+            {/*</li>*/}
+            {/*<li className="nav-item">*/}
+            {/*<a className="nav-link text-dark" href="#">تماس با ما</a>*/}
+            {/*</li>*/}
+            {/*<li className="nav-item">*/}
+            {/*<a className="nav-link text-dark" href="#">فیلم ها</a>*/}
+            {/*</li>*/}
+            {/*<li className="nav-item">*/}
+            {/*<a className="nav-link text-dark" href="#">خرید اشتراک</a>*/}
+            {/*</li>*/}
+            {/*</ul>*/}
 
-                {/*</nav>*/}
+            {/*</nav>*/}
             {/*</Row>*/}
             <Row className="justify-content-center">
                 <div className="col-12 col-md-10">

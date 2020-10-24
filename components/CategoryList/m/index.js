@@ -1,17 +1,17 @@
-import React from 'react';
+import React,{useState} from 'react';
 import useSWR, {useSWRPages} from "swr";
 import fetcher from "./../../../lib/fetcher";
-import useOnScreen from "../../../hooks/use-on-screen";
+import useOnScreen from "../../../hooks/useOnScreen";
 import Container from "react-bootstrap/Container";
 
 import rtl from './../../../style/reboot.module.css';
 import {MusicCard} from "../../music/MusicCard";
-
-
+import MusicList from "../../index/MusicList";
 
 export default function CategoryList({categorySlug}) {
+    const [cat_title,setCatTitle]=useState('');
     const {pages, isLoadingMore, loadMore, pageSWRs, pageCount} = useSWRPages(
-        `category-musics-${categorySlug}`,
+        `category_musics_${categorySlug}`,
         ({offset, withSWR}) => {
             // console.log('offset', offset);
 
@@ -24,41 +24,35 @@ export default function CategoryList({categorySlug}) {
             // console.log('data', data);
             if (!data) return null;
 
-            const {musics} = data;
-            // console.log('movies', movies);
-
+            const {musics,categories,cat_title} = data;
+            setCatTitle(cat_title);
+            // console.log('musics',musics);
             // return null;
-            let Musics = musics.data.map(music => (
+
+            let musicCats = categories.map(music => (
+                    <MusicList sub={true} key={music.token} title={music.title} showAll={music.slug} musics={music.musics}/>
+                )
+            );
+
+            let categoryMusic = musics.data.map(music => (
                 <MusicCard key={music.id} music={music}/>
             ));
-            return Musics;
+
+            console.log('categoryMusic',categoryMusic);
+            return [...musicCats,...categoryMusic]
+
 
         },
         SWR => SWR.data.musics.next_page_url,
-        []
+        [categorySlug]
     );
 
-    const [infiniteScrollEnabled, setInfiniteScrollEnabled] = React.useState(
-        false
-    );
     const $loadMoreButton = React.useRef(null);
-    const infiniteScrollCount = React.useRef(0);
     const isOnScreen = useOnScreen($loadMoreButton, "200px");
 
     React.useEffect(() => {
-        if (!infiniteScrollEnabled || !isOnScreen) return;
-
-        loadMore();
-
-        const count = infiniteScrollCount.current;
-
-        if (count + 1 === 3) {
-            setInfiniteScrollEnabled(false);
-            infiniteScrollCount.current = 0;
-        } else {
-            infiniteScrollCount.current = count + 1;
-        }
-    }, [infiniteScrollEnabled, isOnScreen]);
+        if (isOnScreen) loadMore();
+    }, [isOnScreen]);
 
 
     return (
@@ -69,6 +63,12 @@ export default function CategoryList({categorySlug}) {
                     <h6 className="mt-3">
                         آهنگ ها
                     </h6>
+                    <h6 className="mt-3">
+                        دسته:
+                        {
+                            cat_title
+                        }
+                    </h6>
 
                     <div className="row">
                         {
@@ -78,18 +78,10 @@ export default function CategoryList({categorySlug}) {
                 </div>
 
                 <Container>
-                    <div className='row justify-content-center my-5'>
-                        <button
-                            ref={$loadMoreButton}
-                            className="col-xl-2 col-md-6 col-6 btn btn-warning  py-2 px-4"
-                            disabled={isLoadingMore}
-                            onClick={() => {
-                                loadMore();
-                                setInfiniteScrollEnabled(true);
-                            }}
-                        >
-                            نمایش بیشتر
-                        </button>
+                    <div className='row justify-content-center my-5' ref={$loadMoreButton} >
+                        {
+                            isLoadingMore ? 'در حال دریافت...' : ''
+                        }
                     </div>
                 </Container>
             </div>

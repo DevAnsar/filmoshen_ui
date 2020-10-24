@@ -41,17 +41,17 @@ const navButtons = [
         icon: 'fa-user'
     },
     {
+        label: "تغییر رمز",
+        path: "/account/profile/password",
+        // icon: <FontAwesomeIcon icon={faUser} />
+        icon: 'fa-edit'
+    },
+    {
         label: "سوابق پرداخت",
         path: "/account/mypayments",
         // icon: <FontAwesomeIcon icon={faUser} />
         icon: 'fa-credit-card'
     },
-    {
-        label: "خروج",
-        path: "/logout",
-        // icon: <FontAwesomeIcon icon={faSign} />
-        icon: 'fa-sad-tear'
-    }
 ];
 
 export default navButtons;

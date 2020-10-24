@@ -4,9 +4,6 @@ import NavButton from "./NavButton";
 const NavBar = props => (
 
     <>
-        {
-            console.log('user',props.user)
-        }
         <div className='avatar'>
             <img src={'/img/account.png'} className="img-fluid d-block mx-auto img-account"/>
         </div>
