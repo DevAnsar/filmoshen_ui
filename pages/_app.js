@@ -45,6 +45,9 @@ export default withRedux(initStore, {debug: false})(
                             />
                             <Component {...pageProps} />
                         </Master>
+                        {/*<h1>*/}
+                            {/*Hello Dear!*/}
+                        {/*</h1>*/}
                     </Provider>
                 </>
             )

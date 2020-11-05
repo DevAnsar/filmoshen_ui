@@ -3,7 +3,7 @@ const next = require('next');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const port = 80;
+const port = 8080;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
@@ -36,7 +36,7 @@ app.prepare()
 
         server.get('/subscribe/:id', (req, res) => {
                 // res.redirect(`http://api.filmoshen.ir:8080/site/payment/get/${req.params.id}?api_token=${req.cookies.token}`);
-                res.redirect(`http://192.186.1.104:8888/site/payment/get/${req.params.id}?api_token=${req.cookies.token}`);
+                res.redirect(`https://filmoshen.com/admin/site/payment/get/${req.params.id}?api_token=${req.cookies.token}`);
         });
 
         server.get('*', (req, res) => {
